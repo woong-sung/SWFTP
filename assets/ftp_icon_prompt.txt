@@ -1,0 +1,4 @@
+Generated with the built-in image_gen tool.
+transparent_background: true
+
+Use case: logo-brand. Asset type: Windows desktop application icon for an FTP file transfer client. Create one polished square app icon: rounded dark navy blue tile with a subtle bright blue edge, extremely large bold white uppercase text exactly "FTP" (F T P) centered, filling most of the tile width, and a small clean cyan upload/download arrow motif beneath the letters. Simple crisp geometry and high contrast, clearly readable when reduced to 32px. Front facing, no perspective, no mockup, no other text, no watermark. Tile occupies 90% of canvas; outside rounded tile is genuinely transparent. Output a single square raster icon.

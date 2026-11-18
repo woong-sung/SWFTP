@@ -1,0 +1,3 @@
+PyQt6>=6.4.0
+# Paramiko 5 removed legacy SHA-1 KEX algorithms still required by this server.
+paramiko>=3.5.1,<4.0

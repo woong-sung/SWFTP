@@ -1,0 +1,31 @@
+if(count($_rightArray) > 0) {
+    $insertValues = array();
+    $insertParams = array();
+    $rowIndex = 0;
+
+    foreach($_rightArray as $data) {
+        if($_jojik_type === 'B') {
+            $bubinID = $data['company_id'];
+            $data['company_no'] = '00000000';
+        }
+
+        $_saupjang_no = $data['saupjang_no'] ? $data['saupjang_no'] : '000';
+        $_station_no = $data['station_no'] ? $data['station_no'] : '0000';
+        $suffix = '_' . $rowIndex;
+        $insertValues[] = "(:target_manager{$suffix}, :company_id{$suffix}, :company_no{$suffix}, :saupjang_no{$suffix}, :station_no{$suffix}, 'Y', :actor_code{$suffix})";
+        $insertParams['target_manager' . $suffix] = $_manager_code;
+        $insertParams['company_id' . $suffix] = $bubinID;
+        $insertParams['company_no' . $suffix] = $data['company_no'];
+        $insertParams['saupjang_no' . $suffix] = $_saupjang_no;
+        $insertParams['station_no' . $suffix] = $_station_no;
+        $insertParams['actor_code' . $suffix] = $_SESSION['manager_code'];
+        $rowIndex++;
+    }
+
+    $strQ = "INSERT INTO manager_saupjang(manager_code, company_id, company_no, saupjang_no, station_no, save_check, temp_key) VALUES " . implode(', ', $insertValues);
+    $result = $db->executeQry($strQ, $insertParams);
+    $__qry['query'] = $strQ;
+    array_push($loop, $__qry);
+}
+
+

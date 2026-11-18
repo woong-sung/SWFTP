@@ -1,0 +1,155 @@
+﻿Compiled from "RepositoryEx.java"
+public class oz.framework.api.RepositoryEx {
+  public oz.framework.api.RepositoryEx(java.lang.String, int, java.lang.String, java.lang.String) throws oz.framework.cp.OZCPException;
+  public oz.framework.api.RepositoryEx(java.lang.String, int, java.lang.String, java.lang.String, boolean) throws oz.framework.cp.OZCPException;
+  public oz.framework.api.RepositoryEx(java.lang.String, java.lang.String, java.lang.String) throws oz.framework.cp.OZCPException;
+  public oz.framework.api.RepositoryEx(java.lang.String, java.lang.String, java.lang.String, boolean) throws oz.framework.cp.OZCPException;
+  public void setRepositoryConfig(oz.util.SortProperties) throws oz.framework.cp.OZCPException;
+  public oz.util.SortProperties getRepositoryConfig() throws oz.framework.cp.OZCPException;
+  public void reloadRepository() throws oz.framework.cp.OZCPException;
+  public java.lang.String[] createItem(java.lang.String[], java.lang.String[], java.lang.String[], boolean[], java.io.InputStream[], java.lang.String, int[], java.lang.String[]) throws oz.framework.cp.OZCPException;
+  public java.lang.String modifyItemName(java.lang.String, java.lang.String, java.lang.String) throws oz.framework.cp.OZCPException;
+  public boolean[] deleteItem(java.lang.String[], boolean[], java.lang.String, int[], java.lang.String[]) throws oz.framework.cp.OZCPException;
+  public boolean[] unDeleteItem(java.lang.String[], java.lang.String, int[], java.lang.String[]) throws oz.framework.cp.OZCPException;
+  public boolean modifyItemDesc(java.lang.String, java.lang.String) throws oz.framework.cp.OZCPException;
+  public oz.framework.repositoryex.info.IOZItemInfo getItemInfo(java.lang.String) throws oz.framework.cp.OZCPException;
+  public boolean hasTheItem(java.lang.String) throws oz.framework.cp.OZCPException;
+  public java.io.InputStream[] getItemsUnCondition(java.lang.String[], boolean[], boolean[], java.lang.String[], int[], java.lang.String[]) throws oz.framework.cp.OZCPException;
+  public java.io.InputStream[] getItems(java.lang.String[], long[], boolean[], boolean[], java.lang.String[], int[], java.lang.String[]) throws oz.framework.cp.OZCPException;
+  public java.io.InputStream[] checkOutItem(java.lang.String[], java.lang.String[], long[], boolean[], int[], java.lang.String[]) throws oz.framework.cp.OZCPException;
+  public java.io.InputStream[] checkOutItem(java.lang.String[], java.lang.String[], long[], boolean[], java.lang.String[], int[], java.lang.String[]) throws oz.framework.cp.OZCPException;
+  public boolean[] checkInItem(java.lang.String[], boolean[], java.io.InputStream[], java.lang.String, boolean[], int[], java.lang.String[]) throws oz.framework.cp.OZCPException;
+  public java.io.InputStream[] undoCheckOutItem(java.lang.String[], boolean[], boolean[], int[], java.lang.String[]) throws oz.framework.cp.OZCPException;
+  public boolean[] isCheckOutUser(java.lang.String[]) throws oz.framework.cp.OZCPException;
+  public boolean rollBackItem(java.lang.String, int, java.lang.String) throws oz.framework.cp.OZCPException;
+  public java.io.InputStream getItemByVersion(java.lang.String, int, boolean) throws oz.framework.cp.OZCPException;
+  public oz.framework.repositoryex.info.IOZHistoryInfoList getHistoryItemList(java.lang.String) throws oz.framework.cp.OZCPException;
+  public oz.framework.repositoryex.info.IOZHistoryInfoList getDeleteHistoryItemInfo(java.lang.String) throws oz.framework.cp.OZCPException;
+  public boolean removeHistoryItem(java.lang.String, int) throws oz.framework.cp.OZCPException;
+  public java.lang.String[] createCategory(java.lang.String[], java.lang.String[], java.lang.String, int[], java.lang.String[]) throws oz.framework.cp.OZCPException;
+  public java.lang.String modifyCategoryName(java.lang.String, java.lang.String, java.lang.String) throws oz.framework.cp.OZCPException;
+  public boolean[] deleteCategory(java.lang.String[], boolean[], java.lang.String, int[], java.lang.String[]) throws oz.framework.cp.OZCPException;
+  public boolean[] unDeleteCategory(java.lang.String[], java.lang.String, int[], java.lang.String[]) throws oz.framework.cp.OZCPException;
+  public int getItemCountInCategory(java.lang.String) throws oz.framework.cp.OZCPException;
+  public oz.framework.repositoryex.info.IOZItemInfoList getItemListInCategory(java.lang.String) throws oz.framework.cp.OZCPException;
+  public oz.framework.repositoryex.info.IOZCategoryInfoList getCategoryListInCategory(java.lang.String, boolean) throws oz.framework.cp.OZCPException;
+  public java.lang.String getCategoryIdOfItem(java.lang.String) throws oz.framework.cp.OZCPException;
+  public oz.framework.repositoryex.info.IOZCategoryInfo getCategoryInfo(java.lang.String) throws oz.framework.cp.OZCPException;
+  public oz.framework.repositoryex.info.IOZItemInfoList getDeletedItemListInCategory(java.lang.String) throws oz.framework.cp.OZCPException;
+  public oz.framework.repositoryex.info.ISearchResult[] getSearchItemListInCategory(java.lang.String, java.lang.String, java.lang.String, java.lang.String, int, java.lang.String, java.lang.String) throws oz.framework.cp.OZCPException;
+  public boolean transferCategory(java.lang.String, java.lang.String) throws oz.framework.cp.OZCPException;
+  public boolean transferItem(java.lang.String[], java.lang.String) throws oz.framework.cp.OZCPException;
+  public java.lang.String createUser(java.lang.String, java.lang.String, java.lang.String) throws oz.framework.cp.OZCPException;
+  public java.lang.String modifyUserName(java.lang.String, java.lang.String) throws oz.framework.cp.OZCPException;
+  public boolean modifyUserPwd(java.lang.String, java.lang.String, java.lang.String) throws oz.framework.cp.OZCPException;
+  public boolean modifyUserDesc(java.lang.String, java.lang.String) throws oz.framework.cp.OZCPException;
+  public boolean deleteUser(java.lang.String) throws oz.framework.cp.OZCPException;
+  public oz.framework.repositoryex.info.IOZUserInfo getUserInfo(java.lang.String) throws oz.framework.cp.OZCPException;
+  public boolean checkUserPwd(java.lang.String, java.lang.String) throws oz.framework.cp.OZCPException;
+  public oz.framework.repositoryex.info.IOZUserInfoList getUserInfoList() throws oz.framework.cp.OZCPException;
+  public boolean isCheckAdmin(java.lang.String) throws oz.framework.cp.OZCPException;
+  public void disableUserLogin(java.lang.String) throws oz.framework.cp.OZCPException;
+  public void enableUserLogin(java.lang.String) throws oz.framework.cp.OZCPException;
+  public boolean isLoginEnabled(java.lang.String) throws oz.framework.cp.OZCPException;
+  public java.lang.String createGroup(java.lang.String, java.lang.String, java.lang.String) throws oz.framework.cp.OZCPException;
+  public java.lang.String modifyGroupName(java.lang.String, java.lang.String) throws oz.framework.cp.OZCPException;
+  public boolean modifyGroupDesc(java.lang.String, java.lang.String) throws oz.framework.cp.OZCPException;
+  public boolean deleteGroup(java.lang.String) throws oz.framework.cp.OZCPException;
+  public java.lang.String createUserInGroup(java.lang.String, java.lang.String, java.lang.String, java.lang.String) throws oz.framework.cp.OZCPException;
+  public boolean transferUser(java.lang.String, java.lang.String) throws oz.framework.cp.OZCPException;
+  public boolean transferGroup(java.lang.String, java.lang.String) throws oz.framework.cp.OZCPException;
+  public oz.framework.repositoryex.info.IOZUserInfoList getUserInfoListInGroup(java.lang.String) throws oz.framework.cp.OZCPException;
+  public oz.framework.repositoryex.info.IOZGroupInfo getGroupInfo(java.lang.String) throws oz.framework.cp.OZCPException;
+  public oz.framework.repositoryex.info.IOZGroupInfoList getSubGroupInfoList(java.lang.String) throws oz.framework.cp.OZCPException;
+  public oz.framework.repositoryex.info.IOZGroupInfo getParentGroupInfo(java.lang.String) throws oz.framework.cp.OZCPException;
+  public java.lang.String getGroupIdOfUser(java.lang.String) throws oz.framework.cp.OZCPException;
+  public boolean addGroupAdmin(java.lang.String, java.lang.String) throws oz.framework.cp.OZCPException;
+  public boolean removeGroupAdmin(java.lang.String, java.lang.String) throws oz.framework.cp.OZCPException;
+  public boolean isUserGroupAdmin(java.lang.String, java.lang.String) throws oz.framework.cp.OZCPException;
+  public oz.framework.repositoryex.info.IOZUserInfoList getUserAdminListInGroup(java.lang.String) throws oz.framework.cp.OZCPException;
+  public java.io.InputStream distributeRepository(java.lang.String, boolean) throws oz.framework.cp.OZCPException;
+  public boolean uploadZipItem(java.lang.String, java.io.InputStream) throws oz.framework.cp.OZCPException;
+  public boolean modifyCategoryGroupAuth(java.lang.String, java.lang.String, int) throws oz.framework.cp.OZCPException;
+  public int getGroupAuthToCategory(java.lang.String, java.lang.String) throws oz.framework.cp.OZCPException;
+  public oz.framework.repositoryex.info.IOZGroupInfoList getGroupListAuthToCategory(java.lang.String, int) throws oz.framework.cp.OZCPException;
+  public oz.framework.repositoryex.info.IOZItemInfoList getItemListAuthToGroupInCategory(java.lang.String, java.lang.String, int) throws oz.framework.cp.OZCPException;
+  public oz.framework.repositoryex.info.IOZCategoryInfoList getCategoryListAuthToGroupInCategory(java.lang.String, java.lang.String, int) throws oz.framework.cp.OZCPException;
+  public boolean modifyItemGroupAuth(java.lang.String, java.lang.String, int) throws oz.framework.cp.OZCPException;
+  public int getGroupAuthToItem(java.lang.String, java.lang.String) throws oz.framework.cp.OZCPException;
+  public oz.framework.repositoryex.info.IOZGroupInfoList getGroupListAuthToItem(java.lang.String, int) throws oz.framework.cp.OZCPException;
+  public oz.framework.repositoryex.info.IOZItemInfoList getItemListAuthToGroup(java.lang.String, int) throws oz.framework.cp.OZCPException;
+  public boolean modifyCategoryUserAuth(java.lang.String, java.lang.String, int) throws oz.framework.cp.OZCPException;
+  public int getUserAuthToCategory(java.lang.String, java.lang.String) throws oz.framework.cp.OZCPException;
+  public oz.framework.repositoryex.info.IOZUserInfoList getUserListAuthToCategory(java.lang.String, int) throws oz.framework.cp.OZCPException;
+  public oz.framework.repositoryex.info.IOZItemInfoList getItemListAuthToUserInCategory(java.lang.String, java.lang.String, int) throws oz.framework.cp.OZCPException;
+  public oz.framework.repositoryex.info.IOZCategoryInfoList getCategoryListAuthToUserInCategory(java.lang.String, java.lang.String, int) throws oz.framework.cp.OZCPException;
+  public boolean modifyItemUserAuth(java.lang.String, java.lang.String, int) throws oz.framework.cp.OZCPException;
+  public int getUserAuthToItem(java.lang.String, java.lang.String) throws oz.framework.cp.OZCPException;
+  public oz.framework.repositoryex.info.IOZUserInfoList getUserListAuthToItem(java.lang.String, int) throws oz.framework.cp.OZCPException;
+  public oz.framework.repositoryex.info.IOZItemInfoList getItemListAuthToUser(java.lang.String, int) throws oz.framework.cp.OZCPException;
+  public int setUserDefinedResourceSync(java.lang.String, java.lang.String[], java.lang.String, java.lang.String[]) throws oz.framework.cp.OZCPException;
+  public java.lang.String[] createItem(java.lang.String[], java.lang.String[], java.lang.String[], boolean[], java.io.InputStream[], java.lang.String, long[], int[], java.lang.String[]) throws oz.framework.cp.OZCPException;
+  public boolean modifyItemDatetime(java.lang.String, long) throws oz.framework.cp.OZCPException;
+  public boolean[] checkInItem(java.lang.String[], boolean[], java.io.InputStream[], java.lang.String, boolean[], long[], int[], java.lang.String[]) throws oz.framework.cp.OZCPException;
+  public java.io.InputStream getHistoryItemByDatetime(java.lang.String, long, boolean, boolean) throws oz.framework.cp.OZCPException;
+  public boolean modifyHistoryItemDatetime(java.lang.String, int, long) throws oz.framework.cp.OZCPException;
+  public java.util.Vector encryptFile(java.lang.String[]) throws oz.framework.cp.OZCPException;
+  public java.util.Vector encryptFile(java.lang.String, boolean) throws oz.framework.cp.OZCPException;
+  public java.util.Vector decryptFile(java.lang.String[]) throws oz.framework.cp.OZCPException;
+  public java.util.Vector decryptFile(java.lang.String, boolean) throws oz.framework.cp.OZCPException;
+  public java.io.InputStream distributeRepository(java.lang.String[]) throws oz.framework.cp.OZCPException;
+  public boolean modifyHistoryItemComment(java.lang.String, int, java.lang.String) throws oz.framework.cp.OZCPException;
+  public oz.framework.repositoryex.info.IOZUserInfoList getUserInfoListInGroup(java.lang.String, boolean) throws oz.framework.cp.OZCPException;
+  public oz.framework.repositoryex.info.IOZGroupInfoList getGroupInfoListInGroup(java.lang.String, boolean) throws oz.framework.cp.OZCPException;
+  public oz.framework.repositoryex.info.IOZItemInfoList getItemInfoListInCategory(java.lang.String, boolean) throws oz.framework.cp.OZCPException;
+  public boolean modifyCategoryDesc(java.lang.String, java.lang.String) throws oz.framework.cp.OZCPException;
+  public oz.framework.repositoryex.info.IOZHistoryInfoList getHistoryItemListByDatetime(java.lang.String) throws oz.framework.cp.OZCPException;
+  public java.io.InputStream distributeRepositoryByDatetime(java.lang.String[]) throws oz.framework.cp.OZCPException;
+  public void logoutToServer() throws oz.framework.cp.OZCPException;
+  public boolean addAdmin(java.lang.String) throws oz.framework.cp.OZCPException;
+  public boolean removeAdmin(java.lang.String) throws oz.framework.cp.OZCPException;
+}
+Compiled from "IOZItemInfo.java"
+public interface oz.framework.repositoryex.info.IOZItemInfo {
+  public abstract boolean isCheckOut();
+  public abstract boolean isDeletable();
+  public abstract java.lang.String getItemID();
+  public abstract java.lang.String getItemName();
+  public abstract java.lang.String getCategoryID();
+  public abstract java.lang.String getCategoryName();
+  public abstract long getUpdateTime();
+  public abstract java.lang.String getDesc();
+  public abstract java.lang.String getComment();
+  public abstract java.lang.String getCreateUserID();
+  public abstract java.lang.String getCreateUserName();
+  public abstract java.lang.String getCheckOutUser();
+  public abstract java.lang.String getCheckOutLocalPath();
+  public abstract int getPerm();
+  public abstract long getSize();
+}
+Compiled from "IOZItemInfoList.java"
+public interface oz.framework.repositoryex.info.IOZItemInfoList {
+  public abstract oz.framework.repositoryex.info.IOZItemInfo getItemInfo(int);
+  public abstract int getSize();
+  public abstract oz.framework.repositoryex.info.IOZItemInfo[] getItemInfos();
+}
+Compiled from "IOZCategoryInfo.java"
+public interface oz.framework.repositoryex.info.IOZCategoryInfo {
+  public abstract java.lang.String getCategoryID();
+  public abstract java.lang.String getCategoryName();
+  public abstract java.lang.String getParentCategoryID();
+  public abstract java.lang.String getParentCategoryName();
+  public abstract java.lang.String getComment();
+  public abstract java.lang.String getDesc();
+  public abstract long getUpdateTime();
+  public abstract java.lang.String getCreateUserID();
+  public abstract java.lang.String getCreateUserName();
+  public abstract int getPerm();
+}
+Compiled from "IOZCategoryInfoList.java"
+public interface oz.framework.repositoryex.info.IOZCategoryInfoList {
+  public abstract oz.framework.repositoryex.info.IOZCategoryInfo getCategoryInfo(int);
+  public abstract int getSize();
+  public abstract oz.framework.repositoryex.info.IOZCategoryInfo[] getCategoryInfos();
+  public abstract void addCategoryInfo(oz.framework.repositoryex.info.IOZCategoryInfo);
+}

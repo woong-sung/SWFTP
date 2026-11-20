@@ -51,8 +51,14 @@ def select_asset(release):
 
 
 class UpdateWorker(QThread):
+    available = pyqtSignal(object)  # validated release metadata
     ready = pyqtSignal(str, str, str)  # file, digest, version
     message = pyqtSignal(str)
+
+    def __init__(self, parent=None, *, check_only=False, release=None):
+        super().__init__(parent)
+        self.check_only = check_only
+        self.release = release
 
     def run(self):
         staged = None
@@ -60,8 +66,10 @@ class UpdateWorker(QThread):
             repo = repository()
             if not repo:
                 return
-            with request(f"https://api.github.com/repos/{repo}/releases/latest") as response:
-                release = json.load(response)
+            release = self.release
+            if release is None:
+                with request(f"https://api.github.com/repos/{repo}/releases/latest") as response:
+                    release = json.load(response)
             asset = select_asset(release)
             if asset is None or self.isInterruptionRequested():
                 return
@@ -69,6 +77,9 @@ class UpdateWorker(QThread):
             if not url.startswith(f"https://github.com/{repo}/releases/download/"):
                 raise ValueError("Unexpected release download URL")
             self.message.emit("새 버전을 다운로드하고 있습니다…")
+            if self.check_only:
+                self.available.emit(release)
+                return
             digest = hashlib.sha256()
             with tempfile.NamedTemporaryFile(suffix=".exe", delete=False) as output:
                 staged = Path(output.name)
@@ -96,7 +107,7 @@ class UpdateWorker(QThread):
                 staged.unlink(missing_ok=True)
 
 
-def install_on_exit(staged, digest, executable=None, pid=None):
+def install_on_exit(staged, digest, executable=None, pid=None, restart=False):
     """Start a hidden helper; retain the current executable on any failure."""
     target = str(Path(executable or sys.executable).resolve())
     quote = lambda value: "'" + str(value).replace("'", "''") + "'"
@@ -119,6 +130,7 @@ try {{
         }} catch {{ Start-Sleep -Milliseconds 1000 }}
     }}
     if (-not $replaced) {{ throw 'Executable replacement failed' }}
+    {"Start-Process -FilePath $target -WorkingDirectory (Split-Path -LiteralPath $target)" if restart else ""}
 }} catch {{
     $_ | Out-String | Set-Content -LiteralPath ($source + '.log')
 }} finally {{

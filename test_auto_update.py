@@ -54,6 +54,56 @@ class UpdateTests(unittest.TestCase):
         finally:
             Path(ready[0][0]).unlink()
 
+    def test_check_only_announces_without_downloading(self):
+        worker = UpdateWorker(check_only=True)
+        available, ready = [], []
+        worker.available.connect(available.append)
+        worker.ready.connect(lambda *args: ready.append(args))
+        with patch("auto_update.request", return_value=io.BytesIO(json.dumps(self.release()).encode())) as request:
+            worker.run()
+        self.assertEqual(len(available), 1)
+        self.assertEqual(ready, [])
+        self.assertEqual(request.call_count, 1)
+
+    def test_confirmation_controls_download(self):
+        from types import SimpleNamespace
+        from unittest.mock import Mock
+        from PyQt6.QtWidgets import QMessageBox
+        from app import TabbedFTPClientApp
+        window = SimpleNamespace(close_after_update_check=False, update_worker=None,
+                                 on_update_ready=Mock(), finish_update_check=Mock(), statusBar=Mock())
+        with patch("app.QMessageBox.question", return_value=QMessageBox.StandardButton.Cancel), patch("app.UpdateWorker") as worker:
+            TabbedFTPClientApp.confirm_update(window, self.release())
+            worker.assert_not_called()
+        with patch("app.QMessageBox.question", return_value=QMessageBox.StandardButton.Ok), patch("app.UpdateWorker") as worker:
+            TabbedFTPClientApp.confirm_update(window, self.release())
+            worker.assert_called_once_with(window, release=self.release())
+            worker.return_value.start.assert_called_once()
+
+    def test_restart_waits_for_active_transfers(self):
+        from types import SimpleNamespace
+        from unittest.mock import Mock
+        from app import TabbedFTPClientApp
+        session = Mock()
+        window = SimpleNamespace(pending_update=("file", "digest"), connection_tabs=Mock(),
+                                 statusBar=Mock(), close=Mock(), restart_for_update=Mock())
+        window.connection_tabs.count.return_value = 1
+        window.connection_tabs.widget.return_value = session
+        session.has_running_operations.return_value = True
+        with patch("app.QTimer.singleShot") as timer:
+            TabbedFTPClientApp.restart_for_update(window)
+            timer.assert_called_once()
+            window.close.assert_not_called()
+        session.has_running_operations.return_value = False
+        TabbedFTPClientApp.restart_for_update(window)
+        window.close.assert_called_once()
+
+    def test_restart_is_launched_after_replacement(self):
+        with patch("auto_update.subprocess.Popen") as launch:
+            install_on_exit("C:/temp/update.exe", "a" * 64, executable="C:/App/client.exe", pid=123, restart=True)
+        script = base64.b64decode(launch.call_args.args[0][-1]).decode("utf-16le")
+        self.assertLess(script.index("File]::Replace"), script.index("Start-Process"))
+
     def test_corrupted_download_is_rejected_and_removed(self):
         worker = UpdateWorker()
         ready, messages = [], []

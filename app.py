@@ -3152,19 +3152,58 @@ class TabbedFTPClientApp(QMainWindow):
         self.update_worker = None
         self.close_after_update_check = False
         if getattr(sys, "frozen", False) and sys.platform == "win32":
-            self.update_worker = UpdateWorker(self)
+            self.update_worker = UpdateWorker(self, check_only=True)
+            self.update_worker.available.connect(self.on_update_available)
             self.update_worker.ready.connect(self.on_update_ready)
             self.update_worker.message.connect(lambda message: self.statusBar().showMessage(message))
             self.update_worker.finished.connect(self.finish_update_check)
             self.update_worker.start()
 
+    def on_update_available(self, release):
+        # Let the checking thread finish before replacing its reference.
+        QTimer.singleShot(0, lambda: self.confirm_update(release))
+
+    def confirm_update(self, release):
+        if self.close_after_update_check:
+            return
+        if self.update_worker is not None and self.update_worker.isRunning():
+            QTimer.singleShot(100, lambda: self.confirm_update(release))
+            return
+        answer = QMessageBox.question(
+            self, "새 버전 알림",
+            f"새 버전이 있습니다. ({release['tag_name']})\n업데이트하시겠습니까?\n"
+            "업데이트가 완료되면 프로그램이 자동으로 재시작됩니다.",
+            QMessageBox.StandardButton.Ok | QMessageBox.StandardButton.Cancel,
+            QMessageBox.StandardButton.Ok)
+        if answer != QMessageBox.StandardButton.Ok:
+            return
+        self.update_worker = UpdateWorker(self, release=release)
+        self.update_worker.ready.connect(self.on_update_ready)
+        self.update_worker.message.connect(lambda message: self.statusBar().showMessage(message))
+        self.update_worker.finished.connect(self.finish_update_check)
+        self.update_worker.start()
+        self.statusBar().showMessage("새 버전을 다운로드하고 있습니다…")
+
     def on_update_ready(self, path, digest, version):
         self.pending_update = (path, digest)
-        self.statusBar().showMessage(f"{version} 다운로드 완료. 프로그램 종료 시 업데이트됩니다.")
+        self.statusBar().showMessage(f"{version} 다운로드 완료. 업데이트 후 재시작합니다…")
 
     def finish_update_check(self):
         if self.close_after_update_check:
             self.close()
+        elif self.pending_update:
+            self.restart_for_update()
+
+    def restart_for_update(self):
+        if not self.pending_update:
+            return
+        sessions = [self.connection_tabs.widget(i)
+                    for i in range(self.connection_tabs.count())]
+        if any(session.has_running_operations() for session in sessions):
+            self.statusBar().showMessage("진행 중인 작업이 끝나면 업데이트 후 재시작합니다…")
+            QTimer.singleShot(1000, self.restart_for_update)
+            return
+        self.close()
 
     def add_connection_tab(self):
         session = SFTPClientApp()
@@ -3220,7 +3259,7 @@ class TabbedFTPClientApp(QMainWindow):
             return
         if self.pending_update:
             try:
-                install_on_exit(*self.pending_update)
+                install_on_exit(*self.pending_update, restart=True)
                 self.pending_update = None
             except Exception as error:
                 self.statusBar().showMessage(f"업데이트 적용 실패: {error}")

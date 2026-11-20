@@ -470,15 +470,35 @@ class FileTableWidget(QTableWidget):
                 return
         super().keyPressEvent(event)
 
-    def dragEnterEvent(self, event):
+    def local_drop_paths(self, mime):
+        """Read Explorer/Desktop URLs without interpreting remote URLs as files."""
+        return list(dict.fromkeys(
+            os.path.normpath(url.toLocalFile()) for url in mime.urls()
+            if url.isLocalFile() and url.toLocalFile()
+            and os.path.exists(url.toLocalFile())))
+
+    def accept_file_drag(self, event):
         mime = event.mimeData()
-        if mime.hasFormat("text/uri-list") or mime.hasFormat("application/x-qabstractitemmodeldatalist"):
+        if mime.hasUrls():
+            if (not self.local_drop_paths(mime)
+                    or (self.is_remote and not self.parent_app.sftp_client)):
+                event.ignore()
+                return
+            # Explorer may propose Move (e.g. Shift-drag). Uploads always copy:
+            # accepting Move would allow the source application to delete files.
+            event.setDropAction(Qt.DropAction.CopyAction)
+            event.accept()
+        elif (mime.hasFormat("application/x-qabstractitemmodeldatalist")
+              and isinstance(event.source(), FileTableWidget)):
             event.acceptProposedAction()
         else:
             event.ignore()
 
+    def dragEnterEvent(self, event):
+        self.accept_file_drag(event)
+
     def dragMoveEvent(self, event):
-        event.acceptProposedAction()
+        self.accept_file_drag(event)
 
     def startDrag(self, supportedActions):
         selected_indexes = self.selectedIndexes()
@@ -508,9 +528,11 @@ class FileTableWidget(QTableWidget):
         pos = event.position().toPoint() if hasattr(event, 'position') else event.pos()
         target_row = self.rowAt(pos.y())
         
-        if mime.hasFormat("text/uri-list"):
-            urls = mime.urls()
-            local_paths = [url.toLocalFile() for url in urls if url.isLocalFile()]
+        if mime.hasUrls():
+            local_paths = self.local_drop_paths(mime)
+            if not local_paths or (self.is_remote and not self.parent_app.sftp_client):
+                event.ignore()
+                return
             if local_paths:
                 if self.is_remote:
                     target_dir = self.parent_app.current_remote_dir
@@ -519,7 +541,8 @@ class FileTableWidget(QTableWidget):
                         if name_item:
                             target_name, is_dir = name_item.data(Qt.ItemDataRole.UserRole)
                             if is_dir:
-                                target_dir = self.parent_app.current_remote_dir.rstrip('/') + "/" + target_name
+                                target_dir = posixpath.normpath(posixpath.join(
+                                    self.parent_app.current_remote_dir, target_name))
                     self.parent_app.upload_multiple_files(local_paths, target_dir)
                 else:
                     target_dir = self.parent_app.current_local_dir
@@ -530,7 +553,8 @@ class FileTableWidget(QTableWidget):
                             if os.path.isdir(local_path):
                                 target_dir = local_path
                     self.parent_app.copy_local_files(local_paths, target_dir)
-            event.acceptProposedAction()
+            event.setDropAction(Qt.DropAction.CopyAction)
+            event.accept()
             
         elif mime.hasFormat("application/x-qabstractitemmodeldatalist"):
             source = event.source()

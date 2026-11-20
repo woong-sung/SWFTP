@@ -139,5 +139,8 @@ try {{
 }}
 """
     encoded = base64.b64encode(script.encode("utf-16le")).decode("ascii")
+    environment = os.environ.copy()
+    environment["PYINSTALLER_RESET_ENVIRONMENT"] = "1"
     subprocess.Popen(["powershell.exe", "-NoProfile", "-NonInteractive", "-WindowStyle", "Hidden",
-                      "-EncodedCommand", encoded], creationflags=subprocess.CREATE_NO_WINDOW)
+                      "-EncodedCommand", encoded], creationflags=subprocess.CREATE_NO_WINDOW,
+                      env=environment)

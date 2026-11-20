@@ -141,6 +141,7 @@ class UpdateTests(unittest.TestCase):
         self.assertIn(".previous", script)
         self.assertLess(script.index("Get-FileHash"), script.index("File]::Replace"))
         self.assertIn("Hidden", command)
+        self.assertEqual(launch.call_args.kwargs["env"]["PYINSTALLER_RESET_ENVIRONMENT"], "1")
 
 
 if __name__ == "__main__":
